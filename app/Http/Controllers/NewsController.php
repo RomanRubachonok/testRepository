@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\News;
 use App\NewsCategory;
 use Illuminate\Http\Request;
 
@@ -14,15 +15,11 @@ class NewsController extends Controller
      */
     public function index()
     {
-//        $news = NewsCategory::orderBy('created_at', 'desc')->take(10)->get();
 
-//        $news = NewsCategory::with(['news' => function($query) {
-//            $query->latest()->take(5);
-//        }])->take(5)->get();
-
+        $news = News::latest()->paginate(20);
         $newsCategory = NewsCategory::inRandomOrder()->take(5)->get();
 
-        return view('news.index', compact('newsCategory'));
+        return view('news.index', compact('newsCategory' , 'news'));
     }
 
     /**
@@ -54,7 +51,7 @@ class NewsController extends Controller
      */
     public function show(News $news)
     {
-        $news->relevantTags();
+        return view('news.show', compact('news'));
     }
 
     /**
